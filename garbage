@@ -1,0 +1,40 @@
+
+int	handle_keyrelease(void	*data)
+{
+	(void)data;
+	return (0);
+}
+
+int	handle_no_event(void *data)
+{
+	(void)data;
+	return (0);
+}
+
+int	handle_input(int keysym, t_data *data)
+{
+	if (keysym == XK_Escape)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	return (0);
+}
+
+int i, j;
+	i = 0;
+	
+	while (i < 1000)
+	{
+		j = 0;
+		while (j < 500)
+		{
+			my_mlx_pixel_put(&img, j, i, 0x00FF0000);
+			j++;
+		}
+		i++;
+	}
+
+img.img = mlx_new_image(data.mlx_ptr, 1920, 1080);
+img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+
+mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
+
+	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, img.img, 0, 0);

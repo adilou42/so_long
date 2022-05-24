@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:12:42 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/05/24 14:51:19 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/05/24 21:02:13 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,23 @@ typedef struct s_data
 	int		count;
 }	t_data;
 
-typedef struct	s_map {
-	void	*img;
+typedef struct s_img
+{
+	void	*mlx_img;
 	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
+	int		bpp; /* bits per pixel */
+	int		line_len;
 	int		endian;
-}				t_map;
+}	t_img;
+
+typedef struct s_rect
+{
+	int	x;
+	int	y;
+	int width;
+	int height;
+	int color;
+}	t_rect;
 
 int	handle_no_event(void *data);
 int	handle_input(int keysym, t_data *data);
