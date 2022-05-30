@@ -4,7 +4,7 @@ MLX = ./mlx/libmlx.a
 
 CC = clang
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 SRC =  main.c
 
