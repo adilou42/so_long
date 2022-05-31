@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 20:17:59 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/05/31 18:57:36 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/05/31 19:18:35 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int main(void)
 	{
 		return (0);
 	}
-	data.win_ptr = mlx_new_window(data.mlx_ptr, 1200, 1200, "window of oufous");
+	data.win_ptr = mlx_new_window(data.mlx_ptr, 5 * 60, 13 * 60, "window of oufous");
 	if (data.win_ptr == NULL)
 	{
 		free(data.win_ptr);
