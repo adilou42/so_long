@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:12:42 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/05/30 15:43:20 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/05/31 18:15:16 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ typedef struct s_img
 
 typedef struct s_world
 {
-	void	*xpm;
-	void	*ptr;
-	void	*win;
+	void	*wall;
+	void	*floor;
+	void	*player;
+	void	*collectible;
+	void	*exit;
 	int		height;
 	int		width;
 	t_img	img;

@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 20:17:59 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/05/30 16:48:22 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/05/31 18:57:36 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,25 @@ int render_rect(t_img *img, t_rect rect)
 	return (0);
 }
 
+int render_wall(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (x <= 60 && y <= 60)
+	{
+		while (x <= 60 && y == 0)
+		{
+			mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->map.wall, x * 60, y);
+			x++;
+		}
+		x = 1;
+	}
+	return (0);
+}
+
 int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
@@ -54,8 +73,11 @@ int	render(t_data *data)
 	// render_rect(&data->img, (t_rect){900, 400, 100, 100, 0x00FF00});
 	// render_rect(&data->img, (t_rect){0, 0, 100, 100, 0xFF0000});
 
-	mlx_put_image_to_window(data->map.ptr, data->map.win, data->map.xpm, 1, 1);
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->map.floor, 0, 0);
 
+	data->map.floor = mlx_xpm_file_to_image(data->mlx_ptr, "./assets/floor.xpm", &data->map.height, &data->map.width);
+	data->map.wall = mlx_xpm_file_to_image(data->mlx_ptr, "./assets/wall.xpm", &data->map.height, &data->map.width);
+	render_wall(data);
 	return (0);
 }
 
@@ -90,36 +112,83 @@ int	handle_keypress(int keysym, t_data *data)
 
 int main(void)
 {
+	// 2 == C;
+	// 3 == P;
+	// 4 == E;
+	char map[5][13] = {
+		{1,1,1,1,1,1,1,1,1,1,1,1,1},
+		{1,0,0,1,0,0,0,0,0,0,0,2,1},
+		{1,0,0,0,0,1,1,1,1,1,0,0,1},
+		{1,3,0,0,1,1,4,0,0,0,0,0,1},
+		{1,1,1,1,1,1,1,1,1,1,1,1,1}
+	};
+
+	int	x = 0;
+	int	y;
 
 	t_data	data;
-	// t_world	map;
 
 	data.count = 0;
-	data.map.height = 17;
-	data.map.width = 19;
-
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
 	{
 		return (0);
 	}
-	data.win_ptr = mlx_new_window(data.mlx_ptr, 1000, 500, "window of oufous");
+	data.win_ptr = mlx_new_window(data.mlx_ptr, 1200, 1200, "window of oufous");
 	if (data.win_ptr == NULL)
 	{
 		free(data.win_ptr);
 		return (0);
 	}
+	data.map.floor = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/floor.xpm", &data.map.height, &data.map.width);
+	data.map.wall = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/wall.xpm", &data.map.height, &data.map.width);
+	data.map.player = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/player.xpm", &data.map.height, &data.map.width);
+	data.map.collectible = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/collectible.xpm", &data.map.height, &data.map.width);
+	data.map.exit = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/exit.xpm", &data.map.height, &data.map.width);
 
-	// data.img.mlx_img = mlx_new_image(data.mlx_ptr, 1000, 500);
-	// data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
-	// 		&data.img.line_len, &data.img.endian);
-	data.map.xpm = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/floor.xpm", &data.map.height, &data.map.width);
-	mlx_loop_hook(data.mlx_ptr, &render, &data);
+	while (x < 5)
+	{
+		y = 0;
+		while (y < 13)
+		{
+			if (map[x][y] == 1)
+			{
+				write(1, "1", 1);
+				mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.wall, x * 60, y * 60);
+			}
+			else if (map[x][y] == 0)
+			{
+				write(1, "0", 1);
+
+				mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.floor, x * 60, y * 60);
+			}
+			else if (map[x][y] == 3)
+
+			{
+				write(1, "3", 1);
+
+				mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.player, x * 60, y * 60);
+			}
+			else if (map[x][y] == 2)
+			{
+				write(1, "2", 1);
+
+				mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.collectible, x * 60, y * 60);
+			}
+			else if (map[x][y] == 4)
+			{
+				write(1, "4", 1);
+
+				mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.exit, x * 60, y * 60);
+			}
+			y++;
+		}
+			write(1, "\n", 1);
+		x++;
+	}
+	
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-	write(1, "BB\n", 3);
-
+	// mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_loop(data.mlx_ptr);
-	write(1, "AA\n", 3);
-
-	mlx_destroy_display(data.win_ptr);
+	return (0);
 }

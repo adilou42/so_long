@@ -38,3 +38,8 @@ img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &im
 mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
 
 	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, img.img, 0, 0);
+
+
+data.img.mlx_img = mlx_new_image(data.mlx_ptr, 1000, 500);
+	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
+			&data.img.line_len, &data.img.endian);
