@@ -1,12 +1,14 @@
 NAME = so_long
 
+# LIBFT = ./Libft_42/Libft_42.a
+
 MLX = ./mlx/libmlx.a
 
 CC = clang
 
 CFLAGS = -g -Wall -Wextra -Werror
 
-SRC =  main.c
+SRC =  main.c GNL/get_next_line.c GNL/get_next_line_utils.c
 
 OBJ = $(SRC:.c=.o)
 

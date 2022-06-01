@@ -43,3 +43,19 @@ mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
 data.img.mlx_img = mlx_new_image(data.mlx_ptr, 1000, 500);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
+
+int	render(t_data *data)
+{
+	if (data->win_ptr == NULL)
+		return (1);
+	// render_background(&data->img, 0xFFFFFF);
+	// render_rect(&data->img, (t_rect){900, 400, 100, 100, 0x00FF00});
+	// render_rect(&data->img, (t_rect){0, 0, 100, 100, 0xFF0000});
+
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->map.floor, 0, 0);
+
+	data->map.floor = mlx_xpm_file_to_image(data->mlx_ptr, "./assets/floor.xpm", &data->map.height, &data->map.width);
+	data->map.wall = mlx_xpm_file_to_image(data->mlx_ptr, "./assets/wall.xpm", &data->map.height, &data->map.width);
+	render_wall(data);
+	return (0);
+}
