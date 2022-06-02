@@ -59,3 +59,10 @@ int	render(t_data *data)
 	render_wall(data);
 	return (0);
 }
+
+
+if (mlx.win_ptr == NULL)
+	{
+		free(mlx.win_ptr);
+		return (0);
+	}

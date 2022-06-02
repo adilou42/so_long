@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 20:17:59 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/01 18:59:55 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:24:28 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,8 @@ t_map	*parsing_map(int fd)
 	i = 0;
 	len = 0;
 	line = get_next_line(fd);
-	
+	if (!line)
+		return (NULL);
 	len = ft_strlen(line);
 	lmap = creat_lmap_elem(line, len);
 	while (line)
@@ -140,121 +141,255 @@ t_map	*parsing_map(int fd)
 	return (lmap);
 }
 
-int	handle_keypress(int keysym, t_data *data)
-{
-	if (keysym == 97)//gauche
-	{
-		data->count++;
-		printf("Move count: %d\n", data->count);
-	}
-	else if (keysym == 119)//haut
-	{
-		data->count++;
-		printf("Move count: %d\n", data->count);
-	}
-	else if (keysym == 100)//droite
-	{
+// int	handle_keypress(int keysym, t_data *data)
+// {
+// 	if (keysym == 97)//gauche
+// 	{
+// 		data->count++;
+// 		printf("Move count: %d\n", data->count);
+// 	}
+// 	else if (keysym == 119)//haut
+// 	{
+// 		data->count++;
+// 		printf("Move count: %d\n", data->count);
+// 	}
+// 	else if (keysym == 100)//droite
+// 	{
 		
-		data->count++;
-		printf("Move count: %d\n", data->count);
-	}
-	else if (keysym == 115)//bas
-	{
-		data->count++;
-		printf("Move count: %d\n", data->count);
+// 		data->count++;
+// 		printf("Move count: %d\n", data->count);
+// 	}
+// 	else if (keysym == 115)//bas
+// 	{
+// 		data->count++;
+// 		printf("Move count: %d\n", data->count);
 
-	}
-	else if (keysym == XK_Escape)
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+// 	}
+// 	else if (keysym == XK_Escape)
+// 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+// 	return (0);
+// }
+
+void	init_images(t_world *world)
+{
+	write(1,"CC\n", 3);
+	world->floor = mlx_xpm_file_to_image(world->mlx->mlx_ptr, "./assets/floor.xpm", &world->height, &world->width);
+	world->wall = mlx_xpm_file_to_image(world->mlx->mlx_ptr, "./assets/wall.xpm", &world->height, &world->width);
+	world->perso = mlx_xpm_file_to_image(world->mlx->mlx_ptr, "./assets/player.xpm", &world->height, &world->width);
+	world->collectible = mlx_xpm_file_to_image(world->mlx->mlx_ptr, "./assets/collectible.xpm", &world->height, &world->width);
+	world->exit = mlx_xpm_file_to_image(world->mlx->mlx_ptr, "./assets/exit.xpm", &world->height, &world->width);
+	write(1, "DD\n", 3);
+}
+
+int	is_mapset(char c)
+{
+	if (c == '0' || c == '1' || c == 'C' || c == 'M'
+		|| c == 'E' || c == 'P' || c == 'F')
+		return (1);
 	return (0);
+}
+
+t_player	*init_player(int i, int j)
+{
+	t_player	*player;
+	t_Coord		coord;
+
+	player = (t_player *)malloc(sizeof(t_player));
+	coord.y = i;
+	coord.x = j;
+	player->coord = coord;
+	player->dir = -1;
+	return (player);
+}
+
+t_world	init_world(char **map, t_mlx *mlx)
+{
+	int		i;
+	int		j;
+	t_world	world;
+
+	i = 0;
+	world.item_count = 0;
+	while (map[i])
+	{
+		write(1, "AA\n", 3);
+		j = 0;
+		while (is_mapset(map[i][j]))
+		{
+			if (map[i][j] == 'P')
+				world.player = init_player(i, j);
+			if (map[i][j] == 'C')
+				world.item_count++;
+			j++;
+		}
+		i++;
+	}
+	write(1, "BB\n", 3);
+	world.map = map;
+	world.mlx = mlx;
+	world.move_count = 0;
+	init_images(&world);
+	return (world);
+}
+
+void	affiche_elem(t_world world, int i, int j)
+{
+	if (world.map[i][j] == '0')
+	{
+		mlx_put_image_to_window(world.mlx->mlx_ptr, 
+			world.mlx->win_ptr, world.floor, j * 60, i * 60);
+	}
+	else if(world.map[i][j] == '1')
+	{
+		mlx_put_image_to_window(world.mlx->mlx_ptr, 
+			world.mlx->win_ptr, world.wall, j * 60, i * 60);
+	}
+	else if (world.map[i][j] == 'C')
+	{
+		mlx_put_image_to_window(world.mlx->mlx_ptr, 
+			world.mlx->win_ptr, world.collectible, j * 60, i * 60);
+	}
+	else if (world.map[i][j] == 'E')
+	{
+		mlx_put_image_to_window(world.mlx->mlx_ptr, 
+			world.mlx->win_ptr, world.exit, j * 60, i * 60);
+	}
+	else if (world.map[i][j] == 'P')
+	{
+		mlx_put_image_to_window(world.mlx->mlx_ptr, 
+			world.mlx->win_ptr, world.perso, j * 60, i * 60);
+	}
+}
+
+void	display_map(t_world world)
+{
+	int		i;
+	int		j;
+	// char	*nb_moves;
+
+	i = 0;
+	j = 0;
+	while (world.map[i])
+	{
+		j = 0;
+		while (is_mapset(world.map[i][j]))
+		{
+			affiche_elem(world, i, j);
+			j++;
+		}
+		i++;
+	}
+}
+
+int refresh(t_world *world)
+{
+	display_map(*world);
+	return (1);
+}
+
+void	free_map(char **map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		map[i] = NULL;
+		i++;
+	}
+	free(map);
+}
+
+void	free_world(t_world *world)
+{
+	int	i;
+
+	i = 0;
+	free_map(world->map);
+	free(world->player);
+	// while (i < 3)
+	// {
+	// 	mlx_destroy_image(world->mlx->mlx_ptr, world->imgset[i].image);
+	// 	i++;
+	// }
+	mlx_destroy_window(world->mlx->mlx_ptr, world->mlx->win_ptr);
+	mlx_destroy_display(world->mlx->mlx_ptr);
+	mlx_loop_end(world->mlx->mlx_ptr);
+	free(world->mlx->mlx_ptr);
+	exit(1);
+}
+
+int	exit_game(t_world *world)
+{
+	free_world(world);
+	return (1);
+}
+
+int	is_exit(t_world world)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (world.map[i])
+	{
+		j = 0;
+		while (is_mapset(world.map[i][j]))
+		{
+			if (world.map[i][j] == 'F')
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	deal_key(int key, t_world *world)
+{
+	// if (is_exit(*world)
+	// 	&& world->map[world->player->coord.y][world->player->coord.x] == 'P')
+	// {
+	// 	if (key == 119)
+	// 		move(world, 0);
+	// 	else if (key == 115)
+	// 		move(world, 1);
+	// 	else if (key == 97)
+	// 		move(world, 2);
+	// 	else if (key == 100)
+	// 		move(world, 3);
+	// }
+	if (key == 65307)
+		free_world(world);
+	return (1);
 }
 
 int main(int ac, char **av)
 {
 	(void)ac;
-	t_data	data;
-	// t_player	player;
+	t_mlx	mlx;
+	t_world	world;
 	t_map	*lmap;
 	char	**map;
 	int fd = open(av[1], O_RDONLY);
 
 	lmap = parsing_map(fd);
 	map = initialize_tmap(lmap);
-
-	// char map[5][13] = {
-	// 	{1,1,1,1,1,1,1,1,1,1,1,1,1},
-	// 	{1,0,0,1,0,0,0,0,0,0,0,'C',1},
-	// 	{1,0,0,0,0,1,1,1,1,1,0,0,1},
-	// 	{1,'P',0,0,1,1,'E',0,0,0,0,0,1},
-	// 	{1,1,1,1,1,1,1,1,1,1,1,1,1}
-	// };
-
-	// int	x = 0;
-	// int	y;
-
-
-	data.count = 0;
-	data.mlx_ptr = mlx_init();
-	if (data.mlx_ptr == NULL)
-	{
-		return (0);
-	}
-	data.win_ptr = mlx_new_window(data.mlx_ptr, 13 * 60, 5 * 60, "window of oufous");
-	if (data.win_ptr == NULL)
-	{
-		free(data.win_ptr);
-		return (0);
-	}
-	data.map.floor = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/floor.xpm", &data.map.height, &data.map.width);
-	data.map.wall = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/wall.xpm", &data.map.height, &data.map.width);
-	data.map.player = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/player.xpm", &data.map.height, &data.map.width);
-	data.map.collectible = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/collectible.xpm", &data.map.height, &data.map.width);
-	data.map.exit = mlx_xpm_file_to_image(data.mlx_ptr, "./assets/exit.xpm", &data.map.height, &data.map.width);
-
-	// while (x < 5)
-	// {
-	// 	y = 0;
-	// 	while (y < 13)
-	// 	{
-	// 		if (map[x][y] == 1)
-	// 		{
-	// 			write(1, "1", 1);
-	// 			mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.wall, y * 60, x * 60);
-	// 		}
-	// 		else if (map[x][y] == 0)
-	// 		{
-	// 			write(1, "0", 1);
-
-	// 			mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.floor, y * 60, x * 60);
-	// 		}
-	// 		else if (map[x][y] == 'P')
-
-	// 		{
-	// 			write(1, "P", 1);
-	// 			player.x = x;
-	// 			player.y = y;
-	// 			mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.player, y * 60, x * 60);
-	// 		}
-	// 		else if (map[x][y] == 'C')
-	// 		{
-	// 			write(1, "C", 1);
-
-	// 			mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.collectible, y * 60, x * 60);
-	// 		}
-	// 		else if (map[x][y] == 'E')
-	// 		{
-	// 			write(1, "E", 1);
-
-	// 			mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.map.exit, y * 60, x * 60);
-	// 		}
-	// 		y++;
-	// 	}
-	// 		write(1, "\n", 1);
-	// 	x++;
-	// }
 	
-	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-	// mlx_loop_hook(data.mlx_ptr, &render, &data);
-	mlx_loop(data.mlx_ptr);
+	mlx.mlx_ptr = mlx_init();
+	if (mlx.mlx_ptr == NULL)
+	{
+		return (0);
+	}
+
+	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, 2500, 1000, "window of oufous");
+	
+	world = init_world(map, &mlx);
+	mlx_hook(world.mlx->win_ptr, 2, 1L << 0, deal_key, &world);
+	mlx_hook(world.mlx->win_ptr, 17, 0L, exit_game, &world);
+	mlx_loop_hook(world.mlx->mlx_ptr, refresh, &world);
+
+	mlx_loop(world.mlx->mlx_ptr);
 	return (0);
 }
