@@ -66,3 +66,33 @@ if (mlx.win_ptr == NULL)
 		free(mlx.win_ptr);
 		return (0);
 	}
+
+
+int	handle_keypress(int keysym, t_data *data)
+{
+	if (keysym == 97)//gauche
+	{
+		data->count++;
+		printf("Move count: %d\n", data->count);
+	}
+	else if (keysym == 119)//haut
+	{
+		data->count++;
+		printf("Move count: %d\n", data->count);
+	}
+	else if (keysym == 100)//droite
+	{
+		
+		data->count++;
+		printf("Move count: %d\n", data->count);
+	}
+	else if (keysym == 115)//bas
+	{
+		data->count++;
+		printf("Move count: %d\n", data->count);
+
+	}
+	else if (keysym == XK_Escape)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	return (0);
+}

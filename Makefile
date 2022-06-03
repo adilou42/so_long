@@ -8,7 +8,7 @@ CC = clang
 
 CFLAGS = -g -Wall -Wextra -Werror
 
-SRC =  main.c GNL/get_next_line.c GNL/get_next_line_utils.c
+SRC =  main.c GNL/get_next_line.c GNL/get_next_line_utils.c utils.c map_creation.c errors.c free.c parsing.c player.c utils_2.c map_check.c
 
 OBJ = $(SRC:.c=.o)
 
