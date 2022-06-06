@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 20:17:59 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/03 21:10:24 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/06 19:33:06 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,32 @@ int	deal_key(int key, t_world *world)
 	return (1);
 }
 
+
+int map_height(char **map)
+{
+	int i;
+
+	i = 0;
+	while (map[i] != NULL)
+	{
+		i++;
+	}
+	printf("i = %d\n", i);
+	return (i);
+}
+int map_width(char **map)
+{
+	int i;
+
+	i = 0;
+	while (map[0][i] != '\n')
+	{
+		i++;
+	}
+	printf("i = %d\n", i);
+	return (i);
+}
+
 int main(int ac, char **av)
 {
 	t_mlx	mlx;
@@ -88,7 +114,7 @@ int main(int ac, char **av)
 	if (ac != 2)
 	{
 		write(1, "BB\n", 3);
-		return (0);
+		// return (0);
 		exit(EXIT_FAILURE);
 	}
 	int fd = open(av[1], O_RDONLY);
@@ -105,7 +131,7 @@ int main(int ac, char **av)
 		print_mlx_error(map);
 	}
 
-	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, world.height * 60, world.width * 60, "window of oufous");
+	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, map_width(map) * 60, map_height(map) * 60, "window of oufous");
 	
 	world = create_world(map, &mlx);
 	mlx_hook(world.mlx->win_ptr, 2, 1L << 0, deal_key, &world);
