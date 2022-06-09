@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 19:15:19 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/03 19:31:18 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/09 17:58:17 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,17 @@ int	check_rules(char **map, int height, int width)
 		return (0);
 	if (!check_wall(map, height, width))
 		return (free_map(map), 0);
-	if (!find_elem(map, 'E') || find_elem(map, 'P') != 1
-		|| !find_elem(map, 'C'))
-		return (free_map(map), 0);
+	if (!find_elem(map, 'E'))
+	{
+		return (free_map(map), 2);
+	}
+	else if (!find_elem(map, 'P'))
+	{
+		return (free_map(map), 3);
+	}
+	else if (!find_elem(map, 'C'))
+	{
+		return (free_map(map), 4);
+	}
 	return (1);
 }

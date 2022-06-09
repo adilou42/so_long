@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 17:38:27 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/03 20:36:31 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/09 17:57:42 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**initialize_tmap(t_map *lmap)
 	int		len;
 
 	if (!lmap)
-		print_error(NULL);
+		print_error(NULL, 0);
 	len = lst_len(lmap);
 	tab = (char **)malloc((len + 1000) * sizeof(char *));
 	if (!tab)
@@ -99,7 +99,6 @@ void	display_map(t_world world)
 {
 	int		i;
 	int		j;
-	// char	*nb_moves;
 
 	i = 0;
 	j = 0;
@@ -113,5 +112,4 @@ void	display_map(t_world world)
 		}
 		i++;
 	}
-	// nb_moves = ft_itoa(world.move_count);
 }
