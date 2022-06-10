@@ -1,6 +1,7 @@
 NAME = so_long
 
 
+
 MLX = ./mlx/libmlx.a
 
 CC = clang

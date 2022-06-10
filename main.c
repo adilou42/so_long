@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 20:17:59 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/09 21:29:26 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/10 18:09:58 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ int	refresh(t_world *world)
 	world->player->dir = -1;
 	if (!is_exit(*world))
 	{
-		mlx_string_put(world->mlx->mlx_ptr, world->mlx->win_ptr,
-			50, 50, 0x0000FF, "VICTORY !!!");
+		exit_game(world);
 	}
 	return (1);
 }
@@ -97,7 +96,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 	{
-		return (write(1,"Invalid number of argument\n", 27), 0);
+		return (write(1, "Invalid number of argument\n", 27), 0);
 	}
 	fd = open(av[1], O_RDONLY);
 	lmap = parsing_map(fd, av[1]);

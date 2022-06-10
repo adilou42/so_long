@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:12:42 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/09 19:01:14 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/10 16:57:23 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ int			map_width(char **map);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void		parsing_map_2(char **line, int fd, t_map *lmap);
 void		hook(char **map, t_mlx mlx);
+void		print_error_2(int nb);
 
 #endif

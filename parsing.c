@@ -6,7 +6,7 @@
 /*   By: ayakdi <ayakdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 18:17:11 by ayakdi            #+#    #+#             */
-/*   Updated: 2022/06/09 19:13:14 by ayakdi           ###   ########.fr       */
+/*   Updated: 2022/06/10 16:57:23 by ayakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ int	verif_list(t_map *lmap)
 
 	tmp = lmap;
 	if (lst_len(lmap) < 3)
-	{
 		return (0);
-	}
 	while (tmp->next)
 	{
 		if (tmp->len != tmp->next->len || tmp->len < 4)
